@@ -1,7 +1,8 @@
 
+Camera = require 'camera'
+
 local Game = {}
 function Game:new()
-  camera:setBounds(-WINDOW_SIZE.x, -WINDOW_SIZE.y, WINDOW_SIZE.x, WINDOW_SIZE.y)
   print('Game:new')
   local o = {}
   setmetatable(o, self)
@@ -13,23 +14,26 @@ function Game:new()
   o.world = love.physics.newWorld(0, 0, true)
   o.world:setCallbacks(beginContact, endContact, preSolve, postSolve)
 
-  o.mouse = require('mouse'):new()
   o.walls = require('walls'):new(o)
   o.player = require('player'):new(o)
   o.spiders = require('spiders'):new(o)
   o.energies = require('energies'):new(o)
   o.bullets = require('bullets'):new(o)
 
-  o.survival_time = 0
+  o.cam = Camera()
+
+  o.last_mouse_x = 0
 
   return o
 end
 
 function Game:update(dt)
   if love.keyboard.isDown('escape') then love.event.quit() end
-  self.survival_time = self.survival_time + dt
+  local mid = love.graphics.getWidth() / 2
+  local mouse_distance = love.mouse.getX() - mid
+  love.mouse.setPosition(mid, mid)
 
-  self.player:update(dt)
+  self.player:update(dt, mouse_distance)
   self.spiders:update(dt)
   self.energies:update(dt)
   self.bullets:update(dt)
@@ -37,23 +41,24 @@ function Game:update(dt)
   self.world:update(dt)
 
   -- Center the camera on the player.
-  camera:setPosition(self.player:getX() - WINDOW_SIZE.x / 2, self.player:getY() - WINDOW_SIZE.y / 2)
-  -- @TODO: Rotate for player's north
-  -- camera:setRotation(math.rad(5))
+  -- self.cam:rotateTo(self.player:getAngle() - math.rad(90))
+  -- self.cam:rotate(-math.rad(5))
+
+  local px, py = self.player:getX(), self.player:getY() - 200
+  self.cam:lookAt(px, py) -- Account for rotation?!
 end
 
 function Game:draw()
-  camera:set()
+  self.cam:attach()
   self.walls:draw()
   self.player:draw()
   self.spiders:draw()
   self.energies:draw()
   self.bullets:draw()
-  camera:unset()
+  self.cam:detach()
 
   --[[
   love.graphics.setColor(255, 255, 255)
-  love.graphics.print("Juan Rhoum has survived for " .. math.ceil(self.survival_time) .. " seconds", 10, 10)
   love.graphics.print("Energy: " .. self.player.energy, 10, 25)
   love.graphics.print("mouse:    " .. self.mouse.getX() .. ':' .. self.mouse.getY(), 10, 10)
   love.graphics.print("position: " .. self.player:getX() .. ':' .. self.player:getY(), 10, 25)

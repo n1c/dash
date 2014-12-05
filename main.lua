@@ -10,6 +10,8 @@ WINDOW_SIZE = {
 WORLD_SIZE = 800
 WORLD_METER = 64
 
+MOUSE_SENSITIVITY = 1
+
 ENTITY_TYPE_PLAYER = 'PLAYER'
 ENTITY_TYPE_WALL = 'WALL'
 ENTITY_TYPE_ENERGY = 'ENERGY'
@@ -49,6 +51,9 @@ function love.load()
   print('love.load')
   math.randomseed(os.time())
   game = require('game'):new()
+
+  love.mouse.setGrabbed(true)
+  love.mouse.setVisible(false)
 end
 
 function love.mousepressed(x, y, button)

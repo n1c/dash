@@ -50,11 +50,15 @@ function Player:getNoseY()
   return self:getY() + math.sin(self.angle) * PLAYER_RADIUS
 end
 
-function Player:update(dt)
+function Player:update(dt, input_turn_force)
   self.last_dash_time = self.last_dash_time + dt
   self.last_fire_time = self.last_fire_time + dt
-  self.angle = math.atan2(self.game.mouse.getY() - self:getY(), self.game.mouse.getX() - self:getX())
-  self.body:setAngle(self.angle)
+
+  -- Don't worry about changing the angle unless there's mouse input
+  if input_turn_force ~= 0 then
+    self.angle = self.angle + ((input_turn_force / 1000) * MOUSE_SENSITIVITY)
+    self.body:setAngle(self.angle)
+  end
 
   local force_angle = self.angle
   local forcedt = PLAYER_MOVE_FORCE * dt
