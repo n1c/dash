@@ -24,7 +24,7 @@ PLAYER_RADIUS = 15
 PLAYER_MOVE_FORCE = 60000
 PLAYER_DASH_IMPULSE = 100
 PLAYER_DASH_WAIT = 0.25
-PLAYER_FIRE_WAIT = 0.5
+PLAYER_FIRE_WAIT = 0.2
 
 ENERGY_COLOR = { 46, 204, 113 }
 ENERGY_RADIUS = 5;
@@ -54,16 +54,6 @@ function love.load()
 
   love.mouse.setGrabbed(true)
   love.mouse.setVisible(false)
-end
-
-function love.mousepressed(x, y, button)
-  if button == 'l' then
-    game.player.must_fire = true
-  end
-
-  if button == 'r' then
-    game.player.must_dash = true
-  end
 end
 
 function love.update(dt)

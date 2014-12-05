@@ -91,6 +91,9 @@ function Player:update(dt, input_turn_force)
     )
   end
 
+  self.must_fire = love.mouse.isDown('l');
+  self.must_dash = love.mouse.isDown('r');
+
   if self.must_dash and self.last_dash_time > PLAYER_DASH_WAIT then
     self.last_dash_time = 0
     self.must_dash = false
