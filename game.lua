@@ -40,12 +40,13 @@ function Game:update(dt)
 
   self.world:update(dt)
 
-  -- Center the camera on the player.
-  -- self.cam:rotateTo(self.player:getAngle() - math.rad(90))
-  -- self.cam:rotate(-math.rad(5))
-
-  local px, py = self.player:getX(), self.player:getY() - 200
+  local px, py = self.player:getX(), self.player:getY()
   self.cam:lookAt(px, py) -- Account for rotation?!
+
+  local diff = self.player:getAngle() + self.cam.rot
+  if (diff ~= 0) then
+    self.cam:rotate(math.rad(-90) - diff)
+  end
 end
 
 function Game:draw()
