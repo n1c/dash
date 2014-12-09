@@ -14,7 +14,7 @@ function Game:new()
   o.world = love.physics.newWorld(0, 0, true)
   o.world:setCallbacks(beginContact, endContact, preSolve, postSolve)
 
-  o.walls = require('walls'):new(o)
+  o.map = require('map'):new(o, 'map250x250')
   o.player = require('player'):new(o)
   o.spiders = require('spiders'):new(o)
   o.energies = require('energies'):new(o)
@@ -42,7 +42,7 @@ function Game:update(dt)
 
   local diff = self.player:getAngle() + self.cam.rot
   if (diff ~= 0) then
-    self.cam:rotate(math.rad(-90) - diff)
+    self.cam:rotate(RAD_NEG_90 - diff)
   end
 
   self.cam:lookAt(self.player:getX() + math.cos(self.player:getAngle()) * 200, self.player:getY() + math.sin(self.player:getAngle()) * 200)
@@ -50,19 +50,12 @@ end
 
 function Game:draw()
   self.cam:attach()
-  self.walls:draw()
+  self.map:draw()
   self.player:draw()
   self.spiders:draw()
   self.energies:draw()
   self.bullets:draw()
   self.cam:detach()
-
-  --[[
-  love.graphics.setColor(255, 255, 255)
-  love.graphics.print("Energy: " .. self.player.energy, 10, 25)
-  love.graphics.print("mouse:    " .. self.mouse.getX() .. ':' .. self.mouse.getY(), 10, 10)
-  love.graphics.print("position: " .. self.player:getX() .. ':' .. self.player:getY(), 10, 25)
-  --]]
 end
 
 -- Contact callbacks

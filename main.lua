@@ -2,6 +2,8 @@
 require('util')
 require('camera')
 
+RAD_NEG_90 = -1.5707963267949
+
 WINDOW_SIZE = {
   x = 800,
   y = 800,

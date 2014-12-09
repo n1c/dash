@@ -9,9 +9,12 @@ function Player:new(game)
   self.__index = self
 
   o.game = game
+
+  local spawn = o.game.map:getSpawn()
+
   o.type = ENTITY_TYPE_PLAYER
   o.color = PLAYER_COLOR
-  o.body = love.physics.newBody(o.game.world, WORLD_SIZE / 2, WORLD_SIZE / 2, 'dynamic')
+  o.body = love.physics.newBody(o.game.world, spawn.x, spawn.y, 'dynamic')
   o.shape = love.physics.newCircleShape(PLAYER_RADIUS)
   o.fixture = love.physics.newFixture(o.body, o.shape, 1)
 
@@ -20,7 +23,7 @@ function Player:new(game)
   o.body:setLinearDamping(12)
   o.body:setAngularDamping(8)
 
-  o.angle = 0
+  o.angle = RAD_NEG_90
   o.energy = 100
   o.must_dash = false
   o.must_fire = false

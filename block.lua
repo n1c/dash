@@ -1,6 +1,6 @@
 
-local Wall = {}
-function Wall:new(game, x, y, w, h)
+local Block = {}
+function Block:new(game, x, y, w, h)
   local o = {}
   setmetatable(o, self)
   self.__index = self
@@ -11,14 +11,14 @@ function Wall:new(game, x, y, w, h)
   o.body = love.physics.newBody(o.game.world, x, y, 'static')
   o.shape = love.physics.newRectangleShape(w, h)
   o.fixture = love.physics.newFixture(o.body, o.shape, 1)
-  o.fixture:setUserData(o) -- deep
+  o.fixture:setUserData(o)
 
   return o
 end
 
-function Wall:draw(dt)
+function Block:draw(dt)
   love.graphics.setColor(self.color)
   love.graphics.polygon('fill', self.body:getWorldPoints(self.shape:getPoints()))
 end
 
-return Wall
+return Block
