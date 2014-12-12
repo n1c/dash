@@ -10,6 +10,7 @@ function Map:new(game, name)
   o.name = name
   o.image = love.graphics.newImage('maps/' .. name .. '.bmp')
   o.imageData = o.image:getData()
+  o.overlay = love.graphics.newImage('maps/' .. name .. '.jpg')
 
   local w, h = o.image:getWidth(), o.image:getHeight()
 
@@ -39,6 +40,9 @@ function Map:draw(dt)
   for i, b in pairs(self.collection) do
     b:draw()
   end
+
+  love.graphics.setColor({ 255, 255, 255 });
+  love.graphics.draw(self.overlay, 0, 0)
 end
 
 return Map
